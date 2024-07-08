@@ -25,6 +25,8 @@ const App = () => {
       setSecondNumber("");
     } else if (firstNumber && symbol) {
       setSecondNumber((n) => `${n}${num}`);
+    } else if (firstNumber === 0 && symbol) {
+      setSecondNumber(num);
     } else if (firstNumber) {
       setFirstNumber((n) => `${n}${num}`);
     } else {
@@ -33,11 +35,17 @@ const App = () => {
   };
 
   const handleSymbols = (sym) => {
-    if (!firstNumber && sym === "-") {
+    if (result) {
+      handleReset();
+    } else if (result === 0) {
+      handleReset();
+    } else if (!firstNumber && sym === "-") {
       setFirstNumber(sym);
+    } else if (symbol) {
+      handleResult();
+    } else {
+      setSymbol(sym);
     }
-
-    setSymbol(sym);
   };
 
   const handleResult = () => {
