@@ -6,61 +6,58 @@ const symbols = ["+", "*", "/", "-"];
 
 const App = () => {
   const [result, setResult] = useState("");
-  const [firstNumber, setFirstNumber] = useState(0);
-  const [secondNumber, setSecondNumber] = useState("");
-  const [symbol, setSymbol] = useState("");
+  const [expression, setExpression] = useState(0);
 
   const handleReset = () => {
-    setFirstNumber(0);
-    setSecondNumber("");
-    setSymbol("");
-    setResult("");
+    setExpression(0);
+    setResult(0);
   };
 
   const handleOnClick = (num) => {
-    if (result) {
-      setResult("");
-      setFirstNumber(num);
-      setSymbol("");
-      setSecondNumber("");
-    } else if (firstNumber && symbol) {
-      setSecondNumber((n) => `${n}${num}`);
-    } else if (firstNumber === 0 && symbol) {
-      setSecondNumber(num);
-    } else if (firstNumber) {
-      setFirstNumber((n) => `${n}${num}`);
+    if (!expression) {
+      setExpression(num);
     } else {
-      setFirstNumber(num);
+      setExpression((n) => `${n}${num}`);
     }
   };
 
   const handleSymbols = (sym) => {
     if (result) {
-      handleReset();
-    } else if (result === 0) {
-      handleReset();
-    } else if (!firstNumber && sym === "-") {
-      setFirstNumber(sym);
-    } else if (symbol) {
-      handleResult();
-    } else {
-      setSymbol(sym);
+      setExpression(`${result}${sym}`);
+      return setResult(0);
+    }
+    if (!symbols.includes(String(expression).at(-1))) {
+      return setExpression((ex) => `${ex}${sym}`);
+    } else if (symbols.includes(expression.at(-1))) {
+      return setExpression((ex) => ex.replace(ex.at(-1), sym));
     }
   };
 
   const handleResult = () => {
-    setResult(eval(Number(firstNumber) + `${symbol}` + Number(secondNumber)));
+    try {
+      const output = eval(expression);
+
+      setResult(output);
+    } catch (error) {
+      setResult("Wrong Input");
+    }
   };
 
   return (
     <div className='border rounded-md bg-slate-800 p-4 w-80 mt-40'>
-      <div className='bg-slate-400 mb-4 rounded-md pr-4 text-right'>
-        <p className='text-lg font-bold text-slate-900'>
-          {firstNumber}
-          {symbol || ""}
-          {secondNumber || ""}
-        </p>
-        <p className='text-lg font-bold text-slate-950 p-2'>{result}</p>
+      <div className='bg-slate-400 mb-4 rounded-md  text-right'>
+        <input
+          type='text'
+          className='w-full py-2 px-3 border-none focus:outline-none bg-slate-700 text-right '
+          readOnly
+          value={expression}
+        />
+        <input
+          type='text'
+          value={result}
+          className='w-full py-2 px-3 border-none focus:outline-none bg-slate-700 text-right '
+          readOnly
+        />
       </div>
       <div className='flex justify-around'>
         <div className='grid grid-cols-3 gap-x-4 gap-y-2 '>
