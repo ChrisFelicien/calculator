@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Button from "./components/Buttons";
 
-const numbers = Array.from({ length: 10 }, (_, index) => index);
+const numbers = Array.from({ length: 9 }, (_, index) => index + 1);
 const symbols = ["+", "*", "/", "-"];
 
 const App = () => {
@@ -54,26 +54,36 @@ const App = () => {
         </p>
         <p className='text-lg font-bold text-slate-950 p-2'>{result}</p>
       </div>
-      <div className='grid grid-cols-4 gap-4'>
-        <Button num={"CE"} bg={`bg-red-600`} onClick={() => handleReset()} />
-        {numbers.map((num) => (
+      <div className='flex justify-around'>
+        <div className='grid grid-cols-3 gap-x-4 gap-y-2 '>
+          <Button num={"CE"} bg={`bg-red-600`} onClick={() => handleReset()} />
+          {numbers.map((num) => (
+            <Button
+              num={num}
+              key={crypto.randomUUID()}
+              w={8}
+              h={8}
+              onClick={() => handleOnClick(num)}
+            />
+          ))}
           <Button
-            num={num}
+            num={0}
             key={crypto.randomUUID()}
             w={8}
             h={8}
-            onClick={() => handleOnClick(num)}
+            onClick={() => handleOnClick(0)}
           />
-        ))}
-        <Button num={"="} onClick={() => handleResult()} />
-
-        {symbols.map((symbol) => (
-          <Button
-            num={symbol}
-            key={crypto.randomUUID()}
-            onClick={() => handleSymbols(symbol)}
-          />
-        ))}
+          <Button num={"="} onClick={() => handleResult()} />
+        </div>
+        <div className='grid grid-cols-1 gap-2 justify-self-start'>
+          {symbols.map((symbol) => (
+            <Button
+              num={symbol}
+              key={crypto.randomUUID()}
+              onClick={() => handleSymbols(symbol)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
